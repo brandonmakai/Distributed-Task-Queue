@@ -4,19 +4,29 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
-	"log"
 	"fmt"
 	"io"
+	"context"
+	"log"
 
 	_"github.com/brandonmakai/task-queue/internal/workers"
 	"github.com/brandonmakai/task-queue/internal/model"
-
+	"github.com/go-redis/redis/v8"
 )
 
+var ctx = context.Background()
+
 func main() {
+	rdb := redis.NewClient(&redis.Options{
+		Addr: "localhost:6379",
+		Password: "",
+		DB: 0,
+	})
+	user := model.User{ID: "1", Name: "Heavenly"}
+
 	client := &http.Client{}
 
-	data := model.Task{ID: "1", Message: "Hello World!", User: "Heavenly"}
+	data := model.Task{ID: "1", Message: "Hello World!", UserID: user.ID}
 
 	fmt.Printf("Data: %v\n", data)
 	jsonData, _ := json.Marshal(data)
@@ -29,13 +39,12 @@ func main() {
 	}
 
 	body, _ := io.ReadAll(resp.Body)
-	fmt.Println(string(body))
+	fmt.Printf("Response String: %v", string(body))
 	
-	var dataObj model.Task
-	err = json.Unmarshal(body, &dataObj)
-	if err != nil {
-		log.Fatalf("Failed to unmarshal data back into hashmap: %v", err)
+	if string(body) == "Success!" {
+		resp, err := rdb.HGet(ctx, "task:1", "Message").Result(); if err != nil {
+			log.Printf("Failed to get hash message: %v", err)
+		}
+		log.Printf("Response Data: %v", resp)
 	}
-
-	log.Println(dataObj.Message)
 }

@@ -6,9 +6,14 @@ import (
 )
 
 type Task struct {
-	ID string 
-	Message string 
-	User string 
+	ID string `json:"ID"`
+	Message string `json:"Message"`
+	UserID string `json:"UserID"`
+}
+
+type User struct {
+	ID string
+	Name string
 }
 
 type Producer struct {

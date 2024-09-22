@@ -10,7 +10,7 @@ import (
 func main() {
 	gateway := http.NewServeMux()
 
-	gateway.HandleFunc("GET /api/tests", api.GetTest)
-	gateway.HandleFunc("POST /api/test",api.PostTest )
+	gateway.HandleFunc("GET /api/tests", api.GetAllTask)
+	gateway.HandleFunc("/api/test",api.PostTask)
 	log.Fatal(http.ListenAndServe(":8080", gateway))
 }

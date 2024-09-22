@@ -20,8 +20,8 @@ func main() {
 
 	server := http.NewServeMux()
 
-	server.HandleFunc("/tasks", services.GetTask)
-	server.HandleFunc("POST /task", services.PostTask)
+	server.HandleFunc("/task-service/tasks", services.GetTask)
+	server.HandleFunc("/task-service/task", services.PostTask)
 
 	log.Fatal(http.ListenAndServe(":8081", server))
 	/*

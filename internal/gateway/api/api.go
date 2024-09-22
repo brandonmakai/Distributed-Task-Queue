@@ -6,12 +6,12 @@ import (
 	"log"
 )
 
-func GetTest(w http.ResponseWriter, r *http.Request) {
+func GetAllTask(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{}
 	dataChan := make(chan []byte)
 
 	go func() {
-		resp, err := client.Get("http://localhost:8081/task")
+		resp, err := client.Get("http://localhost:8081/task-service/tasks")
 		if err != nil {
 			log.Printf("Failed to get tasks: %v", err)
 			dataChan <- []byte("Error fetching tasks")
@@ -32,12 +32,13 @@ func GetTest(w http.ResponseWriter, r *http.Request) {
 	w.Write(<-dataChan) 
 } 
 
-func PostTest(w http.ResponseWriter, r *http.Request) {
+func PostTask(w http.ResponseWriter, r *http.Request) {
 	client := http.Client{}
 	dataChan := make(chan []byte)
 	go func() {
 		body := r.Body
-		resp, err := client.Post("http://localhost:8081/task", "application/json", body)
+		log.Printf("Body Data: %v", body)
+		resp, err := client.Post("http://localhost:8081/task-service/task", "application/json", body)
 		if err != nil {
 			log.Printf("Failed to post data to task servce: %v", err)
 			dataChan <- []byte("Failed to post data to task service.")
