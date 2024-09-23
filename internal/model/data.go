@@ -1,19 +1,19 @@
-package model 
+package model
 
 import (
-	"github.com/go-redis/redis/v8"
 	"context"
+	"time"
+
+	"github.com/go-redis/redis/v8"
 )
 
 type Task struct {
-	ID string `json:"ID"`
-	Message string `json:"Message"`
-	UserID string `json:"UserID"`
-}
-
-type User struct {
-	ID string
-	Name string
+	ID string `json:"id"`
+	Type string `json:"type"`
+	Payload map[string]interface{} `json:"payload"`
+	Status string `json:"status"`
+	CreatedAt time.Time `json:"created_at"` 
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type Producer struct {

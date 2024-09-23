@@ -14,26 +14,13 @@ import (
 	_"github.com/go-redis/redis/v8"
 )
 
-//var ctx = context.Background()
-
 func main() {
-
 	server := http.NewServeMux()
 
-	server.HandleFunc("/task-service/tasks", services.GetTask)
+	server.HandleFunc("/task-service/tasks/{id}", services.GetTask)
 	server.HandleFunc("/task-service/task", services.PostTask)
+	server.HandleFunc("/task-service/enqueue", services.EnqueueTask)
+	server.HandleFunc("/task-service/pop", services.PopTask)
 
 	log.Fatal(http.ListenAndServe(":8081", server))
-	/*
-
-
-
-
-	pong, err := rdb.Ping(ctx).Result()
-	if err != nil {
-		log.Fatalf("Could not connect to Redis: %v", err)
-	}
-	fmt.Println(pong)
-	*/
-
 }
